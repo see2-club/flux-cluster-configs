@@ -23,6 +23,21 @@ spec:
   secretRef:
     name: ghcr-login-secret
 ---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: see2-pwa-demo
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: see2-pwa-demo
+  filterTags:
+    pattern: '^.+-[a-f0-9]+-(?P<ts>[0-9]+)'
+    extract: '$ts'
+  policy:
+    numerical:
+      order: asc
+---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageUpdateAutomation
 metadata:
