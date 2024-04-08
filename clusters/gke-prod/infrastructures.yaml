@@ -7,8 +7,8 @@ metadata:
 spec:
   interval: 5m0s
   ref:
-    # branch: main
-    branch: gke-prod
+    branch: main
+    # branch: gke-prod
   secretRef:
     name: flux-system
   url: https://github.com/see2-club/flux-cluster-infrastructures.git
