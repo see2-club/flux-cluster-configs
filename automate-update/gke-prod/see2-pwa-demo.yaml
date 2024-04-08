@@ -1,0 +1,50 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: see2-pwa-demo
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system
+  url: https://github.com/see2-club/see2-pwa-demo.git
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: see2-pwa-demo
+  namespace: flux-system
+spec:
+  image: ghcr.io/see2-club/see2-pwa-demo
+  interval: 3m
+  secretRef:
+    name: ghcr-login-secret
+    namespace: frontend
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: see2-pwa-demo
+  namespace: flux-system
+spec:
+  git:
+    checkout:
+      ref:
+        branch: deploy
+    commit:
+      author:
+        email: fluxcdbot@users.noreply.github.com
+        name: fluxcdbot
+      messageTemplate: '{{range .Updated.Images}}{{println .}}{{end}}'
+    push:
+      branch: deploy
+  interval: 3m0s
+  sourceRef:
+    kind: GitRepository
+    name: see2-pwa-demo
+  update:
+    path: ./frontend
+    strategy: Setters
