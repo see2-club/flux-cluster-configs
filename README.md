@@ -29,9 +29,13 @@
 
 ### Procedure
 
-1. 在 GitLab 的 Kubernete Group 內建立一組長效的 Deploy Token
-    - scope: `read_repository`, `read_registry`, `read_package_registry`
-    - username: `flux`
+
+1. 在 Github 建立 PAT 並設置以下權限
+
+- Administration -> Access: Read-only
+- Contents -> Access: Read and write
+- Metadata -> Access: Read-only
+
 2. `kubectl create namespace flux-system`
 3. `kubectl -n flux-system create secret generic flux-system --from-literal=username=flux --from-literal=password=<deploy_token>`
 4. `cd clusters/<cluster_name>` 並遵循後續步驟，建立檔案
