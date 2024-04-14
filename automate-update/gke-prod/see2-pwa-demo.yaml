@@ -5,9 +5,9 @@ metadata:
   name: see2-pwa-demo
   namespace: flux-system
 spec:
-  interval: 5m0s
+  interval: 3m0s
   ref:
-    branch: main
+    branch: deploy
   secretRef:
     name: flux-system
   url: https://github.com/see2-club/see2-pwa-demo.git
@@ -19,7 +19,7 @@ metadata:
   namespace: flux-system
 spec:
   image: ghcr.io/see2-club/see2-pwa-demo
-  interval: 3m
+  interval: 3m0s
   secretRef:
     name: ghcr-login-secret
 ---
@@ -38,6 +38,7 @@ spec:
     numerical:
       order: asc
 ---
+# Deploy - Dev
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageUpdateAutomation
 metadata:
@@ -60,5 +61,19 @@ spec:
     kind: GitRepository
     name: see2-pwa-demo
   update:
-    path: ./frontend
+    path: ./frontend/overlays/dev
     strategy: Setters
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: see2-pwa-demo-depoly-dev
+  namespace: flux-system
+spec:
+  interval: 3m0s
+  path: ./frontend/overlays/dev
+  prune: true
+  force: false
+  sourceRef:
+    kind: GitRepository
+    name: see2-pwa-demo
