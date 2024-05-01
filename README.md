@@ -112,6 +112,7 @@ spec:
 3. 執行 `flux bootstrap github \
   --components-extra=image-reflector-controller,image-automation-controller \
   --token-auth \
+  --read-write-key \
   --owner=see2-club \
   --repository=flux-cluster-configs \
   --branch=main \
